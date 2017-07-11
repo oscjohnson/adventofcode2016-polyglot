@@ -6,6 +6,10 @@ DATA DIVISION.
    01 WS-TEMP.
       05 WS-C1 OCCURS 7 TIMES.
          10 WS-D1 PIC X(1) VALUE '.'.
+   01 HEIGHT-INDEX PIC 9(2) VALUE 1.
+   01 WIDTH-INDEX PIC 9(2) VALUE 1.
+   01 ColumnIndex PIC 999.
+   01 RowIndex PIC 999.
    LINKAGE SECTION.
    01 WS-WIDTH PIC 9(2) VALUE 1.
    01 WS-HEIGHT PIC 9(2) VALUE 1.
@@ -15,10 +19,14 @@ DATA DIVISION.
             15 WS-D PIC X(1) VALUE '.'.
 
 PROCEDURE DIVISION USING WS-TABLE, WS-WIDTH, WS-HEIGHT.
-   MOVE '#' TO WS-C(1,1)
-   MOVE '#' TO WS-C(1,2)
-   MOVE '#' TO WS-C(1,3)
-   MOVE '#' TO WS-C(2,1)
-   MOVE '#' TO WS-C(2,2)
-   MOVE '#' TO WS-C(2,3)
+   A-PARA.
+   PERFORM ADD-ROW VARYING RowIndex FROM 1 BY 1 UNTIL RowIndex > WS-HEIGHT
 EXIT PROGRAM.
+
+   ADD-COLUMN.
+      MOVE '#' TO WS-C(RowIndex,ColumnIndex).
+
+   ADD-ROW.
+      MOVE '#' TO WS-C(RowIndex, ColumnIndex).
+      PERFORM ADD-COLUMN VARYING ColumnIndex FROM 1 BY 1 UNTIL ColumnIndex > WS-WIDTH.
+      MOVE 1 TO ColumnIndex.
