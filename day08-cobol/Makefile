@@ -3,4 +3,5 @@ default:
 	@cobc -c -free util.cob
 	@cobc -c -free move-row.cob
 	@cobc -c -free move-column.cob
-	@cobc -x -o main main.o util.o move-column.o move-row.o
+	@cobc -c -free create-rect.cob
+	@cobc -x -o main main.o util.o move-column.o move-row.o create-rect.o
