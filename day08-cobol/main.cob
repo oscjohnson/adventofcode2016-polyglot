@@ -1,40 +1,75 @@
-           IDENTIFICATION DIVISION.
-           PROGRAM-ID. MAIN.
+ IDENTIFICATION DIVISION.
+ PROGRAM-ID. MAIN.
+  
+  ENVIRONMENT DIVISION.
+    INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+       SELECT STUDENT ASSIGN TO 'input_short.txt'
+       ORGANIZATION IS LINE SEQUENTIAL. 
 
-           DATA DIVISION.
-              WORKING-STORAGE SECTION.
-              01 WS-TIMES PIC 9(2) VALUE 1.
-              01 WS-ROW PIC 9(2) VALUE 1.
-              01 WS-COLUMN PIC 9(2) VALUE 2.
-              01 RECT-WITDTH PIC 9(2) VALUE 3.
-              01 RECT-HEIGHT PIC 9(2) VALUE 2.
-              01 WS-TEMP.
-                 05 WS-C1 OCCURS 7 TIMES.
-                 10 WS-D1 PIC X(1) VALUE '.'.
-              01 WS-TABLE.
-                 05 WS-A OCCURS 3 TIMES INDEXED BY I.
-                 10 WS-C OCCURS 7 TIMES INDEXED BY J.
-                    15 WS-D PIC X(1) VALUE '.'.
+ DATA DIVISION.
+  FILE SECTION.
+  FD STUDENT.
+  01 STUDENT-FILE.
+     05 STUDENT-ID PIC 9(5).
+     05 NAME PIC A(25).
 
-           PROCEDURE DIVISION.
-              CALL 'CREATE-RECT' USING WS-TABLE, RECT-WITDTH,
-              RECT-HEIGHT.
-              CALL 'PRINT-TABLE' USING WS-TABLE.
+    WORKING-STORAGE SECTION.
+    01 WS-LINE.
+         05 WS-STUDENT-ID PIC 9(5).
+         05 WS-NAME PIC A(25).
+    01 WS-EOF PIC A(1).
+    01 ACTION PIC X(10).
+    01 DIRECTION PIC X(10).
+    01 WS-STR3 PIC X(10).
+    01 CELL PIC 9(2).
+    01 CELL-STR PIC X(10).
+    01 SCRAP PIC X(10).
+    01 WS-STR-BY PIC X(10).
 
-              MOVE 2 TO WS-COLUMN
-              MOVE 1 TO WS-TIMES
-              CALL 'MOVE-COLUMN' USING WS-TABLE, WS-COLUMN, WS-TIMES.
+    01 WS-TIMES PIC 9(2) VALUE 1.
+    01 WS-ROW PIC 9(2) VALUE 1.
+    01 WS-COLUMN PIC 9(2) VALUE 2.
+    01 RECT-WIDTH PIC 9(2) VALUE 3.
+    01 RECT-HEIGHT PIC 9(2) VALUE 2.
+    01 WS-TEMP.
+       05 WS-C1 OCCURS 7 TIMES.
+       10 WS-D1 PIC X(1) VALUE '.'.
+    01 WS-TABLE.
+       05 WS-A OCCURS 3 TIMES INDEXED BY I.
+       10 WS-C OCCURS 7 TIMES INDEXED BY J.
+          15 WS-D PIC X(1) VALUE '.'.
 
-              MOVE 1 TO WS-ROW
-              MOVE 4 TO WS-TIMES
-              CALL 'MOVE-ROW' USING WS-TABLE, WS-ROW, WS-TIMES.
+ PROCEDURE DIVISION.
+  OPEN INPUT STUDENT.
+     PERFORM UNTIL WS-EOF='Y'
+     READ STUDENT INTO WS-LINE
+        AT END MOVE 'Y' TO WS-EOF
+        NOT AT END
+            UNSTRING WS-LINE DELIMITED BY SPACE
+                INTO ACTION, DIRECTION, CELL-STR, WS-STR-BY, WS-TIMES
+            END-UNSTRING
+            IF ACTION = 'rect'
+                UNSTRING DIRECTION DELIMITED BY 'x'
+                    INTO RECT-WIDTH, RECT-HEIGHT
+                END-UNSTRING
+                CALL 'CREATE-RECT' USING WS-TABLE, RECT-WIDTH, RECT-HEIGHT
+                CALL 'PRINT-TABLE' USING WS-TABLE
+            ELSE
+                UNSTRING CELL-STR DELIMITED BY '='
+                  INTO SCRAP, CELL
+                END-UNSTRING
+                IF DIRECTION = 'column'
+                    ADD 1 TO CELL
+                    CALL 'MOVE-COLUMN' USING WS-TABLE, CELL, WS-TIMES
+                ELSE
+                    ADD 1 TO CELL
+                    CALL 'MOVE-ROW' USING WS-TABLE, CELL, WS-TIMES
+                END-IF
+            END-IF
+     END-READ
+     END-PERFORM
+     CALL 'PRINT-TABLE' USING WS-TABLE.
+ STOP RUN.
 
-              MOVE 2 TO WS-COLUMN
-              MOVE 1 TO WS-TIMES
-              CALL 'MOVE-COLUMN' USING WS-TABLE, WS-COLUMN, WS-TIMES.
-
-              CALL 'PRINT-TABLE' USING WS-TABLE.
-
-           STOP RUN.
-
-             *> 0 index to 1 index compensation
+   *> 0 index to 1 index compensation

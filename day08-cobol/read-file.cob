@@ -15,27 +15,29 @@ DATA DIVISION.
      05 NAME PIC A(25).
 
   WORKING-STORAGE SECTION.
-  01 WS-STUDENT.
+  01 WS-LINE.
      05 WS-STUDENT-ID PIC 9(5).
      05 WS-NAME PIC A(25).
   01 WS-EOF PIC A(1).
   01 ACTION PIC X(10).
   01 DIRECTION PIC X(10).
   01 WS-STR3 PIC X(10).
-  01 CELL PIC X(10).
-  01 WS-TIMES PIC 9(2).
+  01 CELL-STR PIC X(10).
+  01 CELL PIC 9(2).
+  01 SCRAP PIC X(10).
   01 WS-STR-BY PIC X(10).
+  01 WS-TIMES PIC 9(2).
   01 RECT-WIDTH PIC 9(2).
   01 RECT-HEIGHT PIC 9(2).
 
 PROCEDURE DIVISION.
   OPEN INPUT STUDENT.
      PERFORM UNTIL WS-EOF='Y'
-     READ STUDENT INTO WS-STUDENT
+     READ STUDENT INTO WS-LINE
         AT END MOVE 'Y' TO WS-EOF
         NOT AT END
-            UNSTRING WS-STUDENT DELIMITED BY SPACE
-                INTO ACTION, DIRECTION, CELL, WS-STR-BY, WS-TIMES
+            UNSTRING WS-LINE DELIMITED BY SPACE
+                INTO ACTION, DIRECTION, CELL-STR, WS-STR-BY, WS-TIMES
             END-UNSTRING
             IF ACTION = 'rect'
                 UNSTRING DIRECTION DELIMITED BY 'x'
@@ -43,10 +45,13 @@ PROCEDURE DIVISION.
                 END-UNSTRING
                 DISPLAY 'rect 'RECT-WIDTH'--'RECT-HEIGHT 
             ELSE
+                UNSTRING CELL-STR DELIMITED BY '='
+                  INTO SCRAP, CELL
+                END-UNSTRING
                 IF DIRECTION = 'column'
-                    DISPLAY 'should be column' WS-STR-BY
+                    DISPLAY 'should be column' CELL '' WS-TIMES
                 ELSE
-                    DISPLAY 'should be row' WS-STR-BY
+                    DISPLAY 'should be row' CELL '' WS-TIMES
                 END-IF
             END-IF
      END-READ
