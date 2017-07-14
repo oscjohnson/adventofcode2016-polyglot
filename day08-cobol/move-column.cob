@@ -4,6 +4,8 @@
        DATA DIVISION.
           WORKING-STORAGE SECTION.
           01 WS-WHAT PIC 9 VALUE 0.
+          01 WS-INDEX PIC 9(2) VALUE 0.
+          01 WS-HELP PIC 9(2) VALUE 0.
           01 WS-TEMP.
              05 WS-C1 OCCURS 3 TIMES.
              10 WS-D1 PIC X(1) VALUE '.'.
@@ -20,13 +22,18 @@
           PERFORM VARYING WS-WHAT FROM 1 BY 1 UNTIL WS-WHAT>WS-TIMES
              PERFORM 3 TIMES
                MOVE WS-C(COUNTER, WS-COLUMN) TO WS-C1(COUNTER)
-
                ADD 1 TO COUNTER
-             
               END-PERFORM
-             MOVE WS-C1(1) TO WS-C(2,WS-COLUMN)
-             MOVE WS-C1(2) TO WS-C(3,WS-COLUMN)
-             MOVE WS-C1(3) TO WS-C(1,WS-COLUMN)
+
+            PERFORM VARYING WS-INDEX FROM 1 BY 1 UNTIL WS-INDEX>3
+               IF WS-INDEX = 3
+                  MOVE WS-C1(3) TO WS-C(1, WS-COLUMN)
+               ELSE
+                  SET WS-HELP TO WS-INDEX
+                  ADD 1 to WS-HELP
+                  MOVE WS-C1(WS-INDEX) TO WS-C(WS-HELP, WS-COLUMN)
+               END-IF
+            END-PERFORM
 
              MOVE 1 TO COUNTER
           END-PERFORM
