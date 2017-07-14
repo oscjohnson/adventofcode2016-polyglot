@@ -69,6 +69,7 @@
             END-IF
      END-READ
      END-PERFORM
+     CLOSE STUDENT.
      CALL 'PRINT-TABLE' USING WS-TABLE.
  STOP RUN.
 
