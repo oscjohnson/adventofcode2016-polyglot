@@ -17,20 +17,18 @@
                 15 WS-D PIC X(1) VALUE '.'.
 
        PROCEDURE DIVISION USING WS-TABLE, WS-COLUMN, WS-TIMES.
-          A-PARA.
-          PERFORM B-PARA VARYING WS-WHAT FROM 1 BY 1
-          UNTIL WS-WHAT>WS-TIMES
+          PERFORM VARYING WS-WHAT FROM 1 BY 1 UNTIL WS-WHAT>WS-TIMES
+             PERFORM 3 TIMES
+               MOVE WS-C(COUNTER, WS-COLUMN) TO WS-C1(COUNTER)
+
+               ADD 1 TO COUNTER
+             
+              END-PERFORM
+             MOVE WS-C1(1) TO WS-C(2,WS-COLUMN)
+             MOVE WS-C1(2) TO WS-C(3,WS-COLUMN)
+             MOVE WS-C1(3) TO WS-C(1,WS-COLUMN)
+
+             MOVE 1 TO COUNTER
+          END-PERFORM
+          
           EXIT PROGRAM.
-
-          B-PARA.
-             PERFORM C-PARA 3 TIMES
-             MOVE WS-C1(1) TO WS-C(2,WS-COLUMN).
-             MOVE WS-C1(2) TO WS-C(3,WS-COLUMN).
-             MOVE WS-C1(3) TO WS-C(1,WS-COLUMN).
-
-             MOVE 1 TO COUNTER.
-
-          C-PARA.
-             MOVE WS-C(COUNTER, WS-COLUMN) TO WS-C1(COUNTER)
-
-             ADD 1 TO COUNTER.
