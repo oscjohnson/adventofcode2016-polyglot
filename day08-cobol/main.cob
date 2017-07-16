@@ -52,7 +52,6 @@
                     INTO RECT-WIDTH, RECT-HEIGHT
                 END-UNSTRING
                 CALL 'CREATE-RECT' USING WS-TABLE, RECT-WIDTH, RECT-HEIGHT
-                CALL 'PRINT-TABLE' USING WS-TABLE
             ELSE
                 UNSTRING CELL-STR DELIMITED BY '='
                   INTO SCRAP, CELL
@@ -65,6 +64,8 @@
                     CALL 'MOVE-ROW' USING WS-TABLE, CELL, WS-TIMES
                 END-IF
             END-IF
+            DISPLAY WS-LINE
+            CALL 'PRINT-TABLE' USING WS-TABLE
      END-READ
      END-PERFORM
      CLOSE STUDENT.
