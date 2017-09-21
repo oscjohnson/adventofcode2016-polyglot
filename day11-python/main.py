@@ -1,42 +1,34 @@
 from itertools import combinations
 import copy
+import re
 
-from pprint import pformat
+GENERATOR = "generator"
+MICROCHIP = "microchip"
+EXTRA_PARTS = "An elerium generator. An elerium-compatible microchip. A dilithium generator. A dilithium-compatible microchip."
 
-GENERATOR = "G"
-MICROCHIP = "M"
+def parse(filename, extra_parts=False):
+	file = open(filename,"r")
+	lines = file.read().split('\n')
+	floors = [ [], [], [], [] ]
 
-"""
-"""
+	for i, line in enumerate(lines):
+		if (extra_parts and i == 0):
+			line += EXTRA_PARTS
 
-floors = {
-	1: ["T-G", "T-M", "Pl-G", "S-G"], # , "E-G", "E-M", "D-M", "D-G"],
-	2: ["S-M", "Pl-M"],
-	3: ["Pr-G", "Pr-M", "R-G", "R-M"],
-	4: []
-}
+		microchips = re.compile("(\w+)-compatible microchip").findall(line)
+		generators = re.compile("(\w+) generator").findall(line)
 
+		floors[i] += map(lambda x: x + '-' + MICROCHIP, microchips)
+		floors[i] += map(lambda x: x + '-' + GENERATOR, generators)
+	
+	return floors
 
-floors2 = {
-	1: ["T-G", "T-M", "Pl-G", "S-G", "E-G", "E-M", "D-M", "D-G"],
-	2: ["S-M", "Pl-M"],
-	3: ["Pr-G", "Pr-M", "R-G", "R-M"],
-	4: []
-}
+floors = parse('input.txt')
+floors2 = parse('input.txt', extra_parts=True)
 
 testinput = {	
-	'floors': {
-		1: ["H-M", "L-M"],
-		2: ["H-G"],
-		3: ["L-G"],
-		4: []
-	},
-	'floors2': {
-		1: ["H-M", "L-M", "E-G", "E-M", "D-M", "D-G"],
-		2: ["H-G"],
-		3: ["L-G"],
-		4: []
-	}
+	'floors': parse("input_short.txt"),
+	'floors2': parse("input_short.txt", extra_parts=True)
 }
 
 def isPossibleMove(c, items, nextItems):
@@ -96,7 +88,7 @@ def counter(queue, seen):
 
 		for candidate in combinations:
 			for direction in [-1, 1]:
-				if (direction == -1 and currentFloor == 1 or direction == 1 and currentFloor == 4):
+				if (direction == -1 and currentFloor == 0 or direction == 1 and currentFloor == 3):
 					continue
 				if (direction == -1 and belowFloorsIsEmpty(currentFloor, state)):
 				 	continue
@@ -125,12 +117,11 @@ def counter(queue, seen):
 							'currentFloor': nextCurrentFloor
 						})
 
-
 def convertStateToPairs(_floors):
 	floors = copy.deepcopy(_floors)
 
 	pairs = {}
-	for floor in range(1, 5):
+	for floor in range(0, 4):
 		for item in floors[floor]:
 			element, device = item.split('-')
 			if not element in pairs:
@@ -145,18 +136,18 @@ def convertStateToPairs(_floors):
 	return val
 
 def belowFloorsIsEmpty(currentFloor, floors):
-	for i in range(1, currentFloor):
+	for i in range(0, currentFloor):
 		if (len(floors[i]) > 0):
 			return False
 
 	return True
 
 def isFinished(floors):
-	return len(floors[1]) == 0 and len(floors[2]) == 0 and len(floors[3]) == 0
+	return len(floors[0]) == 0 and len(floors[1]) == 0 and len(floors[2]) == 0
 
-star1 = counter([{'state': testinput['floors'],'count': 0,'currentFloor': 1}], set())
-star2 = counter([{'state': testinput['floors2'], 'count': 0, 'currentFloor': 1}], set())
 
+star1 = counter([{'state': testinput['floors'],'count': 0,'currentFloor': 0}], set())
+star2 = counter([{'state': testinput['floors2'], 'count': 0, 'currentFloor': 0}], set())
 print star1, star2
 
 
