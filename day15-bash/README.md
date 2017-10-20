@@ -1,4 +1,10 @@
-If you run a mac you should already be running a bash shell and if the `main.sh` file has privelige to execute it will run with simply typing `./main.sh` in terminal.
+Installation:
+Should run in any bash shell.
+
+To run code
+```
+./main.sh
+```
 
 
 TODO:

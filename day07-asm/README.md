@@ -1,9 +1,8 @@
 To install:
 ```
-brew install smlnj
+brew install nasm
 ```
-
 To run code:
 ```
-sml main.sml
+make && ./main
 ```

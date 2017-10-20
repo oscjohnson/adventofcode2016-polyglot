@@ -1,9 +1,9 @@
 To install:
 ```
-brew install smlnj
+brew install clisp
 ```
 
 To run code:
 ```
-sml main.sml
+clisp main.clisp
 ```

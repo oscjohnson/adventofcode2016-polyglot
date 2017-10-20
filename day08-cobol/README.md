@@ -1,4 +1,4 @@
-### Installation
+To install:
 
 ```sh
 brew install gnu-cobol
