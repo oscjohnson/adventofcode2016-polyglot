@@ -1,9 +1,9 @@
 To install:
 ```
-brew install kotlin
+brew install elixir
 ```
 
 To run code:
 ```
-make && make run
+elixir main.exs
 ```

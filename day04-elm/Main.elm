@@ -1,9 +1,4 @@
 
--- Correct answers: 409147, 991
--- To run (prerequistice is that elm is installed):
--- $ elm reactor && open http://localhost:8000
--- Click Main.elm
--- NOTE: for some reason my implementation is really slow, and it takes about a minute to get the result.
 
 import Html exposing(div, h1, h2, text)
 import Data

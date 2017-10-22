@@ -63,7 +63,6 @@
 								)
 								"dec" (update r (keyword op1) dec)
 								"inc" (update r (keyword op1) inc)
-								"mult" (update r (keyword op1) (fn[a] (* 2 a)))
 								r))
 						(recur instructions n-ip n-r n-toggle-map part2) )))))))
 
