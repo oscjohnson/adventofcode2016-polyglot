@@ -22,7 +22,7 @@ I recommend this way of discovering new languages, the challenges are big enough
 However depending on which languages you choose I believe it's possible to be in sync with the challenges as judging by [ttencate's solutions](https://github.com/ttencate/aoc2016) who also did a polyglot challenge and submitted the last code commit on December 25th.
 
 Some caveats:
-day19 part2 is solved in js
-day22 part2 has no actual implementation, it is solved by printing the board and then paper and pen.
-day24 part1 part2 Implementation missing (crystal)
-day25 part1 part2 Implementation missing (c)
+* day19 part2 is solved in js
+* day22 part2 has no actual implementation, it is solved by printing the board and then paper and pen.
+* day24 part1 part2 Implementation missing (crystal)
+* day25 part1 part2 Implementation missing (c)
